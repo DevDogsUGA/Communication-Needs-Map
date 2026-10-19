@@ -4,3 +4,6 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .streamlit/secrets.toml
+site/
+.firebase/
+*-debug.log

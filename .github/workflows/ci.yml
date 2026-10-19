@@ -23,3 +23,43 @@ jobs:
         run: |
           uv export --no-dev --no-hashes --no-emit-project -o requirements.txt
           git diff --exit-code requirements.txt
+
+  # The in-browser (stlite) version on Firebase Hosting. Each pull request gets a preview link;
+  # merging to main deploys https://g311-communication-needs-map.web.app.
+  deploy:
+    needs: check
+    # Pull requests from forks can't sign in to Google Cloud, so they only get the check.
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # lets GitHub prove to Google Cloud which repo is deploying (no stored keys)
+      pull-requests: write # for the preview-link comment
+    env:
+      FIREBASE_PROJECT: g311-communication-needs-map
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
+      - run: uv run --no-dev python scripts/build_site.py
+      - uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: projects/139531751236/locations/global/workloadIdentityPools/github/providers/github
+          service_account: github-deploy@g311-communication-needs-map.iam.gserviceaccount.com
+      - name: Deploy the live site
+        if: github.event_name == 'push'
+        run: npx --yes firebase-tools@15 deploy --only hosting --project "$FIREBASE_PROJECT" --non-interactive
+      - name: Deploy a preview
+        if: github.event_name == 'pull_request'
+        id: preview
+        run: |
+          npx --yes firebase-tools@15 hosting:channel:deploy "pr-${{ github.event.pull_request.number }}" \
+            --expires 7d --project "$FIREBASE_PROJECT" --json > preview.json
+          echo "url=$(jq -r '.result[].url' preview.json | head -n 1)" >> "$GITHUB_OUTPUT"
+      - name: Comment the preview link
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v3
+        with:
+          header: preview
+          message: |
+            Preview: ${{ steps.preview.outputs.url }}
+            (updates on every push to this PR, expires 7 days after the last push)
