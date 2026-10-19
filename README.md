@@ -31,6 +31,9 @@ df = get(
 ```
 
 The API needs a key. Get a [free key](https://api.census.gov/data/key_signup.html) (it comes by email within minutes) and put it in `.env` as `CENSUS_API_KEY`.
+If Gemini replies "This model is currently experiencing high demand", change the model in `scripts/gemini.py` to an older Flash model such as `gemini-3.5-flash`. The newest model is the busiest on the free tier.
+
+The Census data source comes in a separate pull request: the BigQuery sandbox or the Census API. Merge one.
 
 ## Run it locally
 
