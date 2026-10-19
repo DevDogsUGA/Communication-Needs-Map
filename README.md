@@ -18,6 +18,8 @@ A blank [Streamlit](https://streamlit.io) app, plus the council district boundar
 | `scripts/gemini.py` | `client()` returns a Gemini client for writing summaries ahead of time. It reads `GEMINI_API_KEY` from `.env` (copy `.env.example`). |
 | `tests/` | [pytest](https://docs.pytest.org) tests. `test_app.py` checks the app starts without errors. |
 
+If Gemini replies "This model is currently experiencing high demand", change the model in `scripts/gemini.py` to an older Flash model such as `gemini-3.5-flash`. The newest model is the busiest on the free tier.
+
 The Census data source comes in a separate pull request: the BigQuery sandbox or the Census API. Merge one.
 
 ## Run it locally
