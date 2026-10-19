@@ -15,6 +15,7 @@ dev = [
     "google-genai>=2.31.0",
     "pytest>=9.1.1",
     "python-dotenv>=1.2.4",
+    "requests>=2.34.2",
     "ruff>=0.17.1",
 ]
 

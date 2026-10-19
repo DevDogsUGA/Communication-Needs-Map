@@ -18,7 +18,19 @@ A blank [Streamlit](https://streamlit.io) app, plus the council district boundar
 | `scripts/gemini.py` | `client()` returns a Gemini client for writing summaries ahead of time. It reads `GEMINI_API_KEY` from `.env` (copy `.env.example`). |
 | `tests/` | [pytest](https://docs.pytest.org) tests. `test_app.py` checks the app starts without errors. |
 
-The Census data source comes in a separate pull request: the BigQuery sandbox or the Census API. Merge one.
+### Census data: Census API
+
+`scripts/census_api.py` has `get()`, which makes one [Census Data API](https://www.census.gov/data/developers.html) call and returns a DataFrame. The API has the newest [American Community Survey](https://www.census.gov/programs-surveys/acs) 5-year estimates. Block group shapes to join with come from [TIGER/Line](https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html).
+
+```python
+from census_api import COUNTY, STATE, get
+
+df = get(
+    "2024/acs/acs5", ["B01001_001E"], "block group:*", f"state:{STATE} county:{COUNTY}"
+)
+```
+
+The API needs a key. Get a [free key](https://api.census.gov/data/key_signup.html) (it comes by email within minutes) and put it in `.env` as `CENSUS_API_KEY`.
 
 ## Run it locally
 
