@@ -18,7 +18,23 @@ A blank [Streamlit](https://streamlit.io) app, plus the council district boundar
 | `scripts/gemini.py` | `client()` returns a Gemini client for writing summaries ahead of time. It reads `GEMINI_API_KEY` from `.env` (copy `.env.example`). |
 | `tests/` | [pytest](https://docs.pytest.org) tests. `test_app.py` checks the app starts without errors. |
 
-The Census data source comes in a separate pull request: the BigQuery sandbox or the Census API. Merge one.
+### Census data: BigQuery sandbox
+
+`scripts/bigquery.py` has `client()`, a [BigQuery](https://cloud.google.com/bigquery/docs/sandbox) client for the team project. Google hosts Census data as [public datasets](https://console.cloud.google.com/marketplace/browse?filter=solution-type:dataset&q=census), for example `bigquery-public-data.census_bureau_acs` (American Community Survey) and `bigquery-public-data.geo_census_blockgroups` (block group shapes). Check which survey year a table covers before you use it; some are several years old.
+
+Sign in once: install the [gcloud CLI](https://cloud.google.com/sdk/docs/install), then run `gcloud auth application-default login` with the Google account you gave on the team form.
+
+```python
+from bigquery import client
+
+df = (
+    client()
+    .query("SELECT ... FROM `bigquery-public-data.census_bureau_acs....`")
+    .to_dataframe()
+)
+```
+
+The sandbox is free with limits (10 GB storage, 1 TB of queries a month) and tables expire after 60 days, so save results to `data/`.
 
 ## Run it locally
 
