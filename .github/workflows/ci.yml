@@ -39,7 +39,7 @@ jobs:
       FIREBASE_PROJECT: g311-communication-needs-map
     steps:
       - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v10
+      - uses: astral-sh/setup-uv@v10.3.0
       - run: uv run --no-dev python scripts/build_site.py
       - uses: google-github-actions/auth@v3
         with:
