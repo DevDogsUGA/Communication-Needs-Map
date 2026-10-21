@@ -316,6 +316,7 @@ dev = [
     { name = "google-genai" },
     { name = "pytest" },
     { name = "python-dotenv" },
+    { name = "requests" },
     { name = "ruff" },
 ]
 
@@ -332,6 +333,7 @@ dev = [
     { name = "google-genai", specifier = ">=2.31.0" },
     { name = "pytest", specifier = ">=9.1.1" },
     { name = "python-dotenv", specifier = ">=1.2.4" },
+    { name = "requests", specifier = ">=2.34.2" },
     { name = "ruff", specifier = ">=0.17.1" },
 ]
 
