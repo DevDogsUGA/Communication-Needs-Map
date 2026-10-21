@@ -61,4 +61,22 @@ uv export --no-dev --no-hashes --no-emit-project -o requirements.txt
 
 ## Deploy
 
+### Firebase Hosting (stlite)
+
+The same `app.py` also runs entirely in the visitor's browser with [stlite](https://github.com/whitphx/stlite), served from Firebase Hosting:
+
+- **Every pull request** gets a preview link, posted as a comment on the PR.
+- **Merging to `main`** deploys https://g311-communication-needs-map.web.app
+
+`scripts/build_site.py` builds it into `site/`. To try it locally:
+
+```sh
+uv run python scripts/build_site.py
+uv run python -m http.server -d site    # http://localhost:8000
+```
+
+Trade-offs: the first load takes 10 to 30 seconds while Python downloads into the browser, and only pure-Python packages or ones [Pyodide supports](https://pyodide.org/en/stable/usage/packages-in-pyodide.html) work. Keep heavy work (geopandas, API calls) in `scripts/` and commit the results to `data/`.
+
+### Streamlit Community Cloud
+
 [Streamlit Community Cloud](https://streamlit.io/cloud) is free and runs straight from this repo: sign in with GitHub, choose **Create app**, pick this repo, branch `main` and file `app.py`. It redeploys on every push to `main`. Apps sleep after 12 hours without visitors and wake on the next visit.
