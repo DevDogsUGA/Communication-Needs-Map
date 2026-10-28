@@ -63,7 +63,9 @@ protobuf==7.36.2
 pyarrow==26.0.0
     # via streamlit
 pydeck==0.9.3
-    # via streamlit
+    # via
+    #   communication-needs-map
+    #   streamlit
 python-dateutil==2.9.0.post0
     # via pandas
 python-multipart==0.0.32
