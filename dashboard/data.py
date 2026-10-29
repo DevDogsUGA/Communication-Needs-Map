@@ -92,6 +92,15 @@ def load_boundaries() -> dict:
     )
 
 
+def load_summaries() -> dict | None:
+    """Gemini's summaries from data/district-summaries.json (built by backend.summaries):
+    {"model", "date", "areas": {"city" or "1"–"6": {"summary", "ideas"}}}, or None."""
+    path = DATA / "district-summaries.json"
+    if not path.exists():
+        return None
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
 def area_name(district: int | None) -> str:
     return CITY if district is None else f"District {district}"
 

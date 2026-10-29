@@ -5,6 +5,7 @@ Files here are committed and read by `app.py`.
 - `mableton-council-districts.geojson`: the six council districts. Properties: `district` (1–6) and `population` (2020 Census).
 - `mableton-city-limits.geojson`: the city boundary.
 - `district-needs.csv`: communication-needs measures for each district, built by `uv run python -m backend.functions` (see below).
+- `district-summaries.json`: a plain-language summary and outreach ideas for the city and each district, written by Gemini from `district-needs.csv` with `uv run python -m backend.summaries`. Keys: `model`, `date`, and `areas` (`"city"`, `"1"`–`"6"`, each with `summary` and `ideas`). Rerun it whenever the CSV changes.
 
 The two GeoJSON files come from the public layer the city's [Find My District](https://www.mableton.gov/1247/Find-My-District) lookup uses: <https://services5.arcgis.com/Mm1BAVEiAXrYE9vn/arcgis/rest/services/CouncilDistricts_CityLimits/FeatureServer> (layers 2 and 3), converted to WGS 84 (EPSG:4326).
 
