@@ -6,15 +6,13 @@ import pandas as pd
 import plotly.graph_objects as go
 
 from dashboard.data import Measure
+from dashboard.theme import Palette
 
-# One blue, light to dark: more of the measure is darker.
-BLUES = ["#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f95"]
-ACCENT = "#2a78d6"
-MUTED = "#c3c2b7"
-INK = "#0b0b0b"
-INK_2 = "#52514e"
-GRID = "#e1e0d9"
-FONT = {"family": 'system-ui, -apple-system, "Segoe UI", sans-serif', "color": INK}
+FAMILY = 'system-ui, -apple-system, "Segoe UI", sans-serif'
+
+
+def _font(p: Palette, **extra) -> dict:
+    return {"family": FAMILY, "color": p.ink, **extra}
 
 
 def _hover(measure: Measure) -> str:
@@ -62,7 +60,11 @@ def _label_point(geometry: dict) -> tuple[float, float]:
 
 
 def district_map(
-    districts: pd.DataFrame, boundaries: dict, measure: Measure, selected: int | None
+    districts: pd.DataFrame,
+    boundaries: dict,
+    measure: Measure,
+    selected: int | None,
+    p: Palette,
 ) -> go.Figure:
     fig = go.Figure(
         go.Choroplethmap(
@@ -70,8 +72,8 @@ def district_map(
             featureidkey="properties.district",
             locations=districts.index,
             z=districts[measure.rate],
-            colorscale=[[i / (len(BLUES) - 1), c] for i, c in enumerate(BLUES)],
-            marker={"opacity": 0.85, "line": {"color": "white", "width": 1.5}},
+            colorscale=[[i / (len(p.ramp) - 1), c] for i, c in enumerate(p.ramp)],
+            marker={"opacity": 0.85, "line": {"color": p.page, "width": 1.5}},
             customdata=_customdata(districts, measure),
             hovertemplate=_hover(measure),
             colorbar={
@@ -79,8 +81,8 @@ def district_map(
                 "thickness": 12,
                 "len": 0.7,
                 "outlinewidth": 0,
-                "title": {"text": measure.short, "side": "right", "font": FONT},
-                "tickfont": FONT,
+                "title": {"text": measure.short, "side": "right", "font": _font(p)},
+                "tickfont": _font(p),
             },
         )
     )
@@ -96,12 +98,13 @@ def district_map(
                 lon=lons,
                 lat=lats,
                 mode="lines",
-                line={"color": INK, "width": 3},
+                line={"color": p.ink, "width": 3},
                 hoverinfo="skip",
             )
         )
 
-    # A white badge with the district number in the middle of each district.
+    # A white badge with the district number in the middle of each district (white in
+    # both modes, so it reads on any fill).
     points = [_label_point(features[d]["geometry"]) for d in districts.index]
     fig.add_trace(
         go.Scattermap(
@@ -110,7 +113,7 @@ def district_map(
             mode="markers+text",
             text=[str(d) for d in districts.index],
             marker={"size": 24, "color": "white"},
-            textfont={"size": 13, "color": INK, "weight": "bold"},
+            textfont={"size": 13, "color": "#0b0b0b", "weight": "bold"},
             hoverinfo="skip",
         )
     )
@@ -127,7 +130,7 @@ def district_map(
     }
     zoom = 10.75
     fig.update_layout(
-        map={"style": "carto-positron", "center": center, "zoom": zoom},
+        map={"style": p.basemap, "center": center, "zoom": zoom},
         # A button on the map that puts it back where it started.
         updatemenus=[
             {
@@ -145,26 +148,31 @@ def district_map(
                 "xanchor": "left",
                 "yanchor": "top",
                 "pad": {"l": 4, "t": 4},
-                "bgcolor": "white",
-                "bordercolor": MUTED,
-                "font": {**FONT, "size": 13},
+                "bgcolor": p.surface,
+                "bordercolor": p.muted,
+                "font": _font(p, size=13),
             }
         ],
         margin={"l": 0, "r": 0, "t": 0, "b": 0},
         height=480,
         showlegend=False,
-        font=FONT,
+        font=_font(p),
         paper_bgcolor="rgba(0,0,0,0)",
     )
     return fig
 
 
 def district_bars(
-    districts: pd.DataFrame, city_rate: float, measure: Measure, selected: int | None
+    districts: pd.DataFrame,
+    city_rate: float,
+    measure: Measure,
+    selected: int | None,
+    p: Palette,
 ) -> go.Figure:
     """Each district's share side by side, with the selected one highlighted."""
     colors = [
-        ACCENT if selected is None or d == selected else MUTED for d in districts.index
+        p.accent if selected is None or d == selected else p.muted
+        for d in districts.index
     ]
     rates = districts[measure.rate]
     fig = go.Figure(
@@ -175,7 +183,7 @@ def district_bars(
             marker={"color": colors, "line": {"width": 0}},
             text=[f"{r:.1%}" for r in rates],
             textposition="outside",
-            textfont={"color": INK, "size": 13},
+            textfont=_font(p, size=13),
             cliponaxis=False,
             customdata=_customdata(districts, measure),
             hovertemplate=_hover(measure),
@@ -183,10 +191,10 @@ def district_bars(
     )
     fig.add_vline(
         x=city_rate,
-        line={"color": INK_2, "width": 1.5, "dash": "dash"},
+        line={"color": p.ink_2, "width": 1.5, "dash": "dash"},
         annotation={
             "text": f"Mableton overall: {city_rate:.1%}",
-            "font": {"color": INK_2, "size": 12},
+            "font": _font(p, color=p.ink_2, size=12),
             "yanchor": "bottom",
         },
         annotation_position="top",
@@ -196,23 +204,23 @@ def district_bars(
         margin={"l": 8, "r": 16, "t": 36, "b": 40},
         bargap=0.45,
         barcornerradius=4,
-        font=FONT,
+        font=_font(p),
         plot_bgcolor="rgba(0,0,0,0)",
         paper_bgcolor="rgba(0,0,0,0)",
         xaxis={
             "tickformat": ".0%",
             "range": [0, rates.max() * 1.25],
-            "gridcolor": GRID,
+            "gridcolor": p.grid,
             "zeroline": True,
-            "zerolinecolor": MUTED,
-            "tickfont": {"color": INK_2},
+            "zerolinecolor": p.muted,
+            "tickfont": {"color": p.ink_2},
         },
         yaxis={
             "autorange": "reversed",
             "automargin": True,
             "ticksuffix": "  ",
-            "tickfont": {"size": 14},
+            "tickfont": _font(p, size=14),
         },
-        hoverlabel={"bgcolor": "white", "font": FONT},
+        hoverlabel={"bgcolor": p.surface, "font": _font(p)},
     )
     return fig

@@ -2,7 +2,8 @@
 
 It reads only files committed in data/, so it needs no keys or secrets to run.
 Fetching and preparing data happens in backend/ and scripts/, ahead of time.
-The pieces live in dashboard/: data.py (loading, measure wording) and charts.py (figures).
+The pieces live in dashboard/: data.py (loading, measure wording), charts.py (figures)
+and theme.py (color schemes, dark mode).
 """
 
 import streamlit as st
@@ -17,6 +18,7 @@ from dashboard.data import (
     load_boundaries,
     load_districts,
 )
+from dashboard.theme import SCHEMES, apply, palette
 
 st.set_page_config(page_title="Mableton Communication Needs", layout="wide")
 
@@ -33,7 +35,21 @@ def pick_from_map():
         st.session_state["area"] = area_name(int(points[0]["location"]))
 
 
-st.title("Mableton Communication Needs")
+title_column, settings_column = st.columns([3, 2], vertical_alignment="center")
+with settings_column.container(
+    horizontal=True,
+    horizontal_alignment="right",
+    vertical_alignment="center",
+    gap="medium",
+):
+    dark = st.toggle("Dark mode", key="dark", width="content")
+    scheme = st.selectbox(
+        "Colors", list(SCHEMES), key="scheme", label_visibility="collapsed", width=170
+    )
+p = palette(dark, scheme)
+apply(p)
+
+title_column.title("Mableton Communication Needs")
 st.markdown(
     "Who might miss city news, and why? This shows where residents speak "
     "other languages, are 65 or older, or have no internet at home, so outreach "
@@ -47,7 +63,7 @@ selected = None if area == CITY else int(area.removeprefix("District "))
 row = city if selected is None else districts.loc[selected]
 
 # --- Headline numbers for the chosen area -------------------------------------------
-st.header(area, divider="blue")
+st.header(area, divider=p.divider)
 st.markdown(
     f"About **{row['population']:,.0f}** residents and **{row['households']:,.0f}** "
     "households."
@@ -74,7 +90,7 @@ for column, m in zip(st.columns(len(MEASURES)), MEASURES):
         st.caption(f"Why it matters: {m.why}")
 
 # --- Compare the districts ----------------------------------------------------------
-st.header("Compare the districts", divider="blue")
+st.header("Compare the districts", divider=p.divider)
 short = st.segmented_control(
     "Measure",
     [m.short for m in MEASURES],
@@ -94,17 +110,20 @@ st.markdown(
 map_column, bar_column = st.columns([3, 2], gap="large")
 with map_column:
     st.plotly_chart(
-        district_map(districts, boundaries, measure, selected),
+        district_map(districts, boundaries, measure, selected, p),
         key="map",
         on_select=pick_from_map,
         selection_mode="points",
         theme=None,
         config={"displayModeBar": False, "scrollZoom": False},
     )
-    st.caption("Darker districts have a higher share. Point at a district for details.")
+    shade = "Brighter" if p.dark else "Darker"
+    st.caption(
+        f"{shade} districts have a higher share. Point at a district for details."
+    )
 with bar_column:
     st.plotly_chart(
-        district_bars(districts, city[measure.rate], measure, selected),
+        district_bars(districts, city[measure.rate], measure, selected, p),
         theme=None,
         config={"displayModeBar": False},
     )
