@@ -1,0 +1,61 @@
+{
+  "model": "gemini-3.8-flash",
+  "date": "2026-10-29",
+  "areas": {
+    "city": {
+      "summary": "Mableton is home to about 77,402 residents, with about 26 percent speaking a language other than English at home and 12 percent speaking English less than very well. Additionally, 13 percent of residents are age 65 or older, and 3 percent of households do not have home internet access. Reaching the entire community will require sharing information through clear multilingual messages as well as traditional, non-digital channels.",
+      "ideas": [
+        "Provide key city notices and materials in multiple languages to support the 12 percent of residents who speak English less than very well.",
+        "Distribute printed newsletters, flyers, or mailers in public spaces to stay in touch with the 3 percent of households without home internet access.",
+        "Coordinate outreach through local senior programs and centers to directly connect with the 13 percent of residents who are age 65 or older."
+      ]
+    },
+    "1": {
+      "summary": "District 1 is home to about 13,062 residents, with 9% age 65 or older compared to 13% across the entire city. Language access is especially important here, as 31% of residents speak a language other than English at home and 15% speak English less than very well, compared to 26% and 12% citywide. In addition, about 4% of households lack internet access at home, slightly higher than the overall city rate of 3%.",
+      "ideas": [
+        "Provide key city updates and announcements in multiple languages to support the 15% of residents who speak English less than very well.",
+        "Distribute printed materials such as mailers and paper flyers to reach the 4% of households that do not have internet access at home."
+      ]
+    },
+    "2": {
+      "summary": "District 2 is home to about 13,589 residents, with about 42 percent speaking a language other than English at home and 22 percent speaking English less than very well, both well above the city averages of 26 percent and 12 percent. The district also has a comparatively younger population, with only about 5 percent of residents age 65 or older compared to 13 percent across Mableton. About 4 percent of households lack home internet access, which is close to the citywide rate of 3 percent.",
+      "ideas": [
+        "Provide multilingual notices and translations for essential city news to reach the 22 percent of residents who speak English less than very well.",
+        "Use digital channels like social media and email updates to engage this district, which has a relatively young population and broad home internet connectivity.",
+        "Distribute printed materials in convenient neighborhood locations so the 4 percent of households without home internet stay informed."
+      ]
+    },
+    "3": {
+      "summary": "District 3 is home to about 13,619 residents, with 28 percent speaking a language other than English at home and 14 percent speaking English less than very well, both slightly higher than the city as a whole. About 14 percent of residents are age 65 or older, which is also above the citywide rate, while only 3 percent of homes lack internet access. Outreach will be most effective by offering translated materials and sharing news through formats that are accessible to older adults.",
+      "ideas": [
+        "Provide translated city notices to support the 14 percent of residents who speak English less than very well.",
+        "Distribute printed flyers and mailers with clear, readable print to engage the 14 percent of neighbors who are 65 or older.",
+        "Use digital channels for everyday updates while keeping paper notices available for the 3 percent of households without home internet."
+      ]
+    },
+    "4": {
+      "summary": "District 4 is home to about 11,898 residents and has a larger proportion of older adults than the city overall, with 16 percent age 65 or older compared to 13 percent across Mableton. Nearly all homes are connected online, with only 2 percent lacking internet access, and just 4 percent of residents speak English less than very well compared to 12 percent citywide.",
+      "ideas": [
+        "Use digital tools such as email newsletters, social media, and the city website as primary communication channels, since 98 percent of households have internet access.",
+        "Coordinate outreach and daytime informational gatherings geared toward older adults, who make up 16 percent of the district.",
+        "Provide clear printed flyers at community hubs to keep the 2 percent of households without home internet informed about city news."
+      ]
+    },
+    "5": {
+      "summary": "District 5 has about 11,471 residents and the highest proportion of seniors in the city, with 17% aged 65 or older compared to 13% across Mableton. About 5% of households do not have internet access at home, which is also slightly higher than the citywide figure of 3%. Meanwhile, 23% of residents speak a language other than English at home, and 10% speak English less than very well.",
+      "ideas": [
+        "Provide printed notices, mailers, and flyers in local gathering spots to reach the 5% of households without home internet.",
+        "Use clear formatting and larger print on announcements to support the 17% of residents who are older adults.",
+        "Offer important updates in multiple languages to help the 10% of residents who speak English less than very well."
+      ]
+    },
+    "6": {
+      "summary": "District 6 is home to about 13,763 residents, with 15 percent age 65 or older compared to 13 percent across Mableton. Only 5 percent of residents speak English less than \"very well\" compared to 12 percent citywide, and only 3 percent of households lack internet access at home. These numbers suggest that digital tools can reach most residents effectively, alongside communications suited for older adults.",
+      "ideas": [
+        "Use online updates and email newsletters as a primary way to share news, as only 3 percent of households lack home internet access.",
+        "Provide printed flyers or mailers with clear, easy-to-read text to reach the 15 percent of residents who are age 65 or older.",
+        "Make essential city announcements available in multiple languages to assist the 5 percent of residents who speak English less than \"very well.\""
+      ]
+    }
+  }
+}

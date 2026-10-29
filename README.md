@@ -39,6 +39,7 @@ If Gemini replies "This model is currently experiencing high demand", change the
 
 ```sh
 uv run python -m backend.functions          # rebuild data/district-needs.csv (needs CENSUS_API_KEY)
+uv run python -m backend.summaries         # rewrite data/district-summaries.json with Gemini (needs GEMINI_API_KEY)
 uv run uvicorn backend.api:app --reload     # serve it at http://localhost:8000 (docs at /docs)
 ```
 

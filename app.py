@@ -6,6 +6,8 @@ The pieces live in dashboard/: data.py (loading, measure wording), charts.py (fi
 and theme.py (color schemes, dark mode).
 """
 
+from datetime import date
+
 import streamlit as st
 
 from dashboard.charts import district_bars, district_map
@@ -17,6 +19,7 @@ from dashboard.data import (
     in_words,
     load_boundaries,
     load_districts,
+    load_summaries,
 )
 from dashboard.theme import SCHEMES, apply, palette
 
@@ -88,6 +91,21 @@ for column, m in zip(st.columns(len(MEASURES)), MEASURES):
             f"({row[m.count]:,.0f} of {row[m.base]:,.0f})."
         )
         st.caption(f"Why it matters: {m.why}")
+
+# --- What it means, written ahead of time by Gemini (backend/summaries.py) -----------
+summaries = load_summaries()
+if summaries:
+    written = summaries["areas"]["city" if selected is None else str(selected)]
+    with st.container(border=True):
+        st.subheader("What this means for outreach")
+        st.markdown(written["summary"])
+        st.markdown("**Ideas for reaching residents**")
+        st.markdown("\n".join(f"- {idea}" for idea in written["ideas"]))
+        when = date.fromisoformat(summaries["date"]).strftime("%B %Y")
+        st.caption(
+            f"Written by AI (Google Gemini, {when}) from the numbers on this page. "
+            "Check it before using it in official materials."
+        )
 
 # --- Compare the districts ----------------------------------------------------------
 st.header("Compare the districts", divider=p.divider)
