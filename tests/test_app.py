@@ -30,3 +30,14 @@ def test_dark_mode_and_color_schemes():
         assert not app.exception
     app.toggle(key="dark").set_value(False).run()
     assert not app.exception
+
+
+def test_summaries_cover_every_area():
+    import json
+
+    summaries = json.loads(
+        (Path(APP).parent / "data" / "district-summaries.json").read_text("utf-8")
+    )
+    assert set(summaries["areas"]) == {"city", "1", "2", "3", "4", "5", "6"}
+    for written in summaries["areas"].values():
+        assert written["summary"] and written["ideas"]
