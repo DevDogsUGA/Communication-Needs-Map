@@ -27,6 +27,9 @@ requirements = [n for n in names if n != "streamlit"]
 shutil.rmtree(SITE, ignore_errors=True)
 shutil.copytree(ROOT / "data", SITE / "data")
 shutil.copy(ROOT / "app.py", SITE / "app.py")
+shutil.copytree(
+    ROOT / "dashboard", SITE / "dashboard", ignore=shutil.ignore_patterns("__pycache__")
+)
 if (ROOT / ".streamlit" / "config.toml").exists():
     shutil.copytree(
         ROOT / ".streamlit",
